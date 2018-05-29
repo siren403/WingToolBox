@@ -12,7 +12,8 @@
     ],
     "activationEvents": [
         "onCommand:wingtoolbox.init",
-        "onCommand:wingtoolbox.readFile"
+        "onCommand:wingtoolbox.readFile",
+        "onCommand:wingtoolbox.convertTable"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -24,6 +25,10 @@
             {
                 "command": "wingtoolbox.readFile",
                 "title": "WingToolBox - readFile"
+            },
+            {
+                "command": "wingtoolbox.convertTable",
+                "title": "WingToolBox - convertTable"
             }
         ]
     },

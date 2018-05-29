@@ -1,40 +1,46 @@
 'use strict';
 import * as vscode from 'vscode';
-import WingToolBox from './WingToolBox';
-import { Stream } from 'stream';
+import {
+    WingToolBox,
+    convertTable
+} from './WingToolBox';
+
 import * as path from 'path';
+import { glob } from './interfaces/IGlobFs';
 
-let glob: IGlobFs = require('glob-fs')({ gitignore: true });
-
-interface IGlobFs {
-    readdir(pattern: string, options: Object, callback: Function): void;
-    readdirSync(pattern: string, options: Object): Array<string>;
-    readdirStream(pattern: string, options: Object): Stream;
-    readdirPromise(pattern: string, options: Object): Promise<Array<string>>;
-}
+const prefix: string = 'wingtoolbox';
 
 export function activate(context: vscode.ExtensionContext) {
 
     console.log('activate wingtoolbox');
 
-    let disposable = vscode.commands.registerCommand('wingtoolbox.init', () => {
-        WingToolBox.intialize().then(() => {
-            console.log('init complete');
-        });
-    });
+    let disposables: vscode.Disposable[] = [
+        vscode.commands.registerCommand(getCommandName('init'), () => {
+            WingToolBox.intialize().then(() => {
+                console.log('init complete');
+            });
+        }),
+        vscode.commands.registerCommand(getCommandName('readFile'), () => {
+            WingToolBox.intialize().then(() => {
+                let paths = [
+                    path.join(WingToolBox.config.root, 'table/*.xlsx'),
+                    path.join(WingToolBox.config.root, 'table/*.xls')
+                ];
+                for (let filepath of paths) {
+                    console.log(filepath, glob.clear().readdirSync(filepath,{}));
+                }
+            });
+        }),
+        vscode.commands.registerCommand(getCommandName('convertTable'), () => {
+            convertTable();
+        })
+    ];
 
-    let readFile = vscode.commands.registerCommand('wingtoolbox.readFile', () => {
-        let paths = [
-            path.join(WingToolBox.config.root, 'test1/*.json'),
-            path.join(WingToolBox.config.root, 'test2/*.json')
-        ];
+    context.subscriptions.push(...disposables);
+}
 
-        let files = glob.readdirSync(paths[0], {});
-        console.log(files);
-
-    });
-
-    context.subscriptions.push(disposable, readFile);
+function getCommandName(name: string): string {
+    return `${prefix}.${name}`;
 }
 
 // this method is called when your extension is deactivated

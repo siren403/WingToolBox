@@ -1,10 +1,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as Excel from './excel/Excel';
 import {
     workspace,
     WorkspaceFolder
 } from 'vscode';
+
+import * as TableConverter from './LanguageTable/Converter';
 
 class WingToolBox {
 
@@ -20,25 +21,31 @@ class WingToolBox {
     }
 
     public static getConfig(): Promise<IConfig> {
+        // if (this.isInit === false) {
         return new Promise<IConfig>((resolve, reject) => {
             let rootPath = this.getRootPath();
             let configPath = 'toolbox.config.json';
             fs.readFile(path.join(rootPath, configPath), 'utf-8', (err, data) => {
                 if (!err && data) {
-                    let config: IConfig = JSON.parse(data);
-                    resolve(config);
+                    this.loadedConfig = JSON.parse(data);
+                    resolve(this.loadedConfig);
                 } else {
-                    return this.createConfig(rootPath, configPath);
+                    return this.createConfig(rootPath, configPath).then((config) => {
+                        this.loadedConfig = config;
+                    });
                 }
             });
         });
+        // } else {
+        // return Promise.resolve(this.loadedConfig);
+        // }
     }
 
     public static createConfig(rootPath: string, configPath: string): Promise<IConfig> {
         return new Promise<IConfig>((resolve, reject) => {
             let config: IConfig = {
                 root: rootPath,
-                excelConfig: Excel.defaultConfig()
+                excelConfig: TableConverter.defaultConfig()
             };
             fs.writeFile(path.join(rootPath, configPath), JSON.stringify(config), (err) => {
                 if (!err) {
@@ -52,7 +59,7 @@ class WingToolBox {
     }
 
     public static async intialize(): Promise<void> {
-        this.loadedConfig = await this.getConfig();
+        await this.getConfig();
     }
 
     private static loadedConfig: IConfig;
@@ -60,14 +67,22 @@ class WingToolBox {
     public static get config(): IConfig {
         return this.loadedConfig;
     }
+
 }
+
 interface IConfig {
     root: string;
-    excelConfig: Excel.IConfig;
+    excelConfig: TableConverter.IConfig;
 }
 
+function convertTable(): void {
+    WingToolBox.intialize().then(() => TableConverter.convert()).catch((e) => console.log(e));
+}
 
-export default WingToolBox;
+export {
+    WingToolBox,
+    convertTable
+};
 
 /**
  * 

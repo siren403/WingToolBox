@@ -1,1 +1,11 @@
-{"root":"/Users/aaron/workspace/vscode-extension/wingtoolbox/testFolder","excelConfig":{"resources":["assets/table"],"export":"resource/table"}}
+{
+    "root": "/Users/aaron/workspace/vscode-extension/wingtoolbox/testFolder",
+    "excelConfig": {
+        "resources": [
+            "table/*.xls",
+            "table/*.xlsx"
+        ],
+        "export": "resource/table",
+        "struct": "map"
+    }
+}
