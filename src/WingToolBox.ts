@@ -1,22 +1,21 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {
-    workspace,
-    WorkspaceFolder
+    workspace
 } from 'vscode';
-
 import * as TableConverter from './LanguageTable/Converter';
 
 class WingToolBox {
 
     public static getRootPath(): string {
         let result: string = '';
-        if (workspace.workspaceFolders !== undefined) {
-            let folders: WorkspaceFolder[] = workspace.workspaceFolders;
-            if (folders.length > 0) {
-                result = folders[0].uri.path;
-            }
-        }
+        // if (workspace.workspaceFolders !== undefined) {
+        //     let folders: WorkspaceFolder[] = workspace.workspaceFolders;
+        //     if (folders.length > 0) {
+        //         result = folders[0].uri.path;
+        //     }
+        // }
+        result = workspace.rootPath as string;
         return result;
     }
 

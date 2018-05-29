@@ -6,13 +6,11 @@ import {
 } from './WingToolBox';
 
 import * as path from 'path';
-import { glob } from './interfaces/IGlobFs';
+import * as fs from 'fs';
 
 const prefix: string = 'wingtoolbox';
 
 export function activate(context: vscode.ExtensionContext) {
-
-    console.log('activate wingtoolbox');
 
     let disposables: vscode.Disposable[] = [
         vscode.commands.registerCommand(getCommandName('init'), () => {
@@ -21,15 +19,15 @@ export function activate(context: vscode.ExtensionContext) {
             });
         }),
         vscode.commands.registerCommand(getCommandName('readFile'), () => {
-            WingToolBox.intialize().then(() => {
-                let paths = [
-                    path.join(WingToolBox.config.root, 'table/*.xlsx'),
-                    path.join(WingToolBox.config.root, 'table/*.xls')
-                ];
-                for (let filepath of paths) {
-                    console.log(filepath, glob.clear().readdirSync(filepath,{}));
-                }
-            });
+            // WingToolBox.intialize().then(() => {
+            //     let paths = [
+            //         path.join(WingToolBox.config.root, 'table/*.xlsx'),
+            //         path.join(WingToolBox.config.root, 'table/*.xls')
+            //     ];
+            //     for (let filepath of paths) {
+            //         console.log(filepath, glob.clear().readdirSync(filepath,{}));
+            //     }
+            // });
         }),
         vscode.commands.registerCommand(getCommandName('convertTable'), () => {
             convertTable();
