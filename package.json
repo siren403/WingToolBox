@@ -1,0 +1,48 @@
+{
+    "name": "wingtoolbox",
+    "displayName": "WingToolBox",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "aaron",
+    "engines": {
+        "vscode": "^1.23.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:wingtoolbox.init",
+        "onCommand:wingtoolbox.readFile"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "wingtoolbox.init",
+                "title": "WingToolBox - Init"
+            },
+            {
+                "command": "wingtoolbox.readFile",
+                "title": "WingToolBox - readFile"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "glob-fs": "^0.1.7",
+        "xlsx": "^0.12.13"
+    }
+}
