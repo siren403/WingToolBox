@@ -15,7 +15,8 @@ export function activate(context: vscode.ExtensionContext) {
     let disposables: vscode.Disposable[] = [
         vscode.commands.registerCommand(getCommandName('init'), () => {
             WingToolBox.intialize().then(() => {
-                console.log('init complete');
+                vscode.window.showInformationMessage('WingToolBox initialize complete');
+                //TODO: 파일 생성 시 포커스
             });
         }),
         vscode.commands.registerCommand(getCommandName('readFile'), () => {

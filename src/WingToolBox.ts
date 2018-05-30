@@ -23,7 +23,7 @@ class WingToolBox {
         // if (this.isInit === false) {
         return new Promise<IConfig>((resolve, reject) => {
             let rootPath = this.getRootPath();
-            let configPath = 'toolbox.config.json';
+            let configPath = 'wingtoolbox.config.json';
             fs.readFile(path.join(rootPath, configPath), 'utf-8', (err, data) => {
                 if (!err && data) {
                     this.loadedConfig = JSON.parse(data);
