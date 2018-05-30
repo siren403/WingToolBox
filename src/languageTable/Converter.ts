@@ -9,17 +9,31 @@ enum EConvertStruct {
     Array = "array"
 }
 
-interface IConfig {
+interface ISourceInfo {
     resources: string[];
     export: string;
+}
+
+interface IConfig {
+    sources: ISourceInfo[];
     struct: string;
+    splits: string[];
 }
 
 function defaultConfig(): IConfig {
     let config: IConfig = {
-        resources: [],
-        export: 'resource/table',
-        struct: EConvertStruct.Map
+        sources: [
+            {
+                resources: [
+                    'assets/table/*.xlsx',
+                    'assets/table/*.xls'
+                ],
+                export: 'resource/table',
+                interfaceOutDir: 'src/table'
+            }
+        ],
+        struct: EConvertStruct.Map,
+        splits: []
     };
     return config;
 }
@@ -33,27 +47,31 @@ async function convert(): Promise<void> {
 
     let struct: EConvertStruct = config.struct as EConvertStruct;
 
-    for (let resPath of config.resources) {
-        let files: string[] = glob.clear().readdirSync(path.join(rootPath, resPath), {});
+    for (let sourcePath of config.sources) {
+        for (let resPath of sourcePath.resources) {
+            let files: string[] = glob.clear().readdirSync(path.join(rootPath, resPath), {});
+            for (let filePath of files) {
+                let sheet = convertSheetFromDir(filePath);
+                if (sheet.length > 0) {
 
-        for (let filePath of files) {
-            let sheet = convertSheetFromDir(filePath);
-            if (sheet.length > 0) {
-                let writePath: string = path.join(rootPath, config.export);
-                let fileName: string = path.basename(filePath);
-                fileName = fileName.replace(path.extname(fileName), '');
-                switch (struct) {
-                    case EConvertStruct.Map:
-                        write(writePath, fileName, convertMap(sheet));
-                        break;
-                    case EConvertStruct.Array:
-                        write(writePath, fileName, convertArray(sheet));
-                        break;
+                    let writePath: string = path.join(rootPath, sourcePath.export);
+                    let fileName: string = path.basename(filePath);
+                    fileName = fileName.replace(path.extname(fileName), '');
+                    switch (struct) {
+                        case EConvertStruct.Map:
+                            write(writePath, fileName, convertMap(sheet));
+                            break;
+                        case EConvertStruct.Array:
+                            write(writePath, fileName, convertArray(sheet));
+                            break;
+                    }
+
                 }
             }
         }
     }
 }
+
 function convertMap(sheetArray: Array<Object>): any {
     try {
         let resultMap: any = {};
@@ -118,6 +136,10 @@ function convertArray(sheetArray: Array<Object>): Array<any> {
         console.log(e);
         return [e];
     }
+}
+
+function filesSplits():void {
+
 }
 
 

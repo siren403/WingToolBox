@@ -31,6 +31,7 @@ class WingToolBox {
                 } else {
                     return this.createConfig(rootPath, configPath).then((config) => {
                         this.loadedConfig = config;
+                        resolve();
                     });
                 }
             });
