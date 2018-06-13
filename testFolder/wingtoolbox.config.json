@@ -1,15 +1,21 @@
 {
-    "root": "/Users/aaron/workspace/vscode-extension/wingtoolbox/testFolder",
+    "root": "c:\\Users\\emong\\workspace\\vscode\\wingtoolbox\\testFolder",
     "excelConfig": {
         "sources": [
             {
                 "resources": [
-                    "table/*.xlsx",
-                    "table/*.xls"
+                    "table/test.xlsx"
                 ],
-                "export": "resource/table"
+                "export": "resource/table/1"
+            },
+            {
+                "resources": [
+                    "table/lang.xls"
+                ],
+                "export": "resource/table/2"
             }
         ],
-        "struct": "map"
+        "struct": "map",
+        "splits": []
     }
 }

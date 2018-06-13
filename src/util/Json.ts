@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { isEmpty } from './Compare';
+// import * as vscode from 'vscode';
 
 function createDir(targetPath: string): void {
 
@@ -8,9 +9,13 @@ function createDir(targetPath: string): void {
         targetPath = targetPath.replace(path.extname(targetPath), '');
     }
 
-    let directorys: string[] = targetPath.split('/');
+    let pattern = /\/|\\/;
+    let directorys: string[] = targetPath.split(pattern);
     let currentDir: string = '';
     for (let dir of directorys) {
+        if(dir.indexOf(':') > 0){
+            dir += '/';
+        }
         currentDir = path.join(currentDir, dir);
         if (fs.existsSync(currentDir) === false) {
             fs.mkdirSync(currentDir);
